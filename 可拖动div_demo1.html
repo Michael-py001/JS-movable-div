@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可移动DIV</title>
+</head>
+<style>
+    #div1 {
+        border: 1px solid red;
+        width: 100px;
+        height: 100px;
+        position: absolute;
+    }
+
+    body {
+        border: 1px solid rgb(0, 255, 98);
+        height: 100vh;
+        margin: 0;
+        box-sizing: border-box;
+    }
+</style>
+
+<body>
+    <div id="div1"></div>
+    <script>
+        window.onload = function () {
+            var div1 = document.getElementById("div1")
+            var firstX = 0;
+            var firstY = 0;
+            // 鼠标按下事件
+            div1.onmousedown = function (e) {
+                var firstX = e.clientX - div1.offsetLeft; //计算出【鼠标点击的坐标X-div左边界到浏览器左边界】的距离，即鼠标到div左边界的距离
+                var firstY = e.clientY - div1.offsetTop;
+                //鼠标拖动事件
+                document.onmousemove = function (e) {
+                    div1.style.left = e.clientX - firstX + "px";//鼠标X坐标 - X坐标到div左边距 = left
+                    div1.style.top = e.clientY - firstY + "px";
+                }
+                // 鼠标松开事件
+                document.onmouseup = function () {
+                    document.onmousemove = null;  //鼠标松开时，清除鼠标事件
+                }
+
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可移动DIV</title>
+</head>
+<style>
+    #div1 {
+        /* border: 1px solid red; */
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        background-color: rgb(67, 207, 231);
+        text-align: center;
+        line-height: 100px;
+    }
+
+    body {
+        border: 1px solid rgb(0, 255, 98);
+        height: 100vh;
+        margin: 0;
+        box-sizing: border-box;
+    }
+</style>
+
+<body>
+    <div id="div1">
+        <span>可拖动的div</span>
+    </div>
+    <script>
+        var div1 = document.getElementById("div1");
+        var move = false;  //设置开关
+        var lastX;
+        var lastY;
+        div1.onmousedown = function (e) {
+            move = true; //开关变成true
+            lastX = e.clientX;
+            lastY = e.clientY;
+        }
+        document.onmousemove = function (e) {  // 使用document而不是div1，因为前者是整个页面文档，后者鼠标快速拖动就会失效
+            if (move) {
+                var deltaX = e.clientX - lastX;//计算出当前鼠标X 减去 按下鼠标的X
+                var deltaY = e.clientY - lastY;
+                var left = parseInt(div1.style.left) || 0;
+                var top = parseInt(div1.style.top) || 0;
+                var resultX = left + deltaX;   // 最终结果X坐标 = div的left + 鼠标移动差值
+                var resultY = top + deltaY;
+                if (resultX < 0) {  //优化鼠标移出页面左边时，div的left改成0
+                    resultX = 0
+                }
+                if (resultY < 0) {
+                    resultY = 0
+                }
+                div1.style.left = resultX + "px"; //left = 当前鼠标X 减去 上一次鼠标的X
+                div1.style.top = resultY + "px";
+                lastX = e.clientX;
+                lastY = e.clientY;
+
+            }
+        }
+        document.onmouseup = function () {
+            console.log("鼠标提起")
+            move = false;
+
+        }
+    </script>
+</body>
+
+</html>
